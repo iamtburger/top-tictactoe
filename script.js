@@ -34,16 +34,15 @@ function player(name, sign, num) {
 // Game logic and control
 const game = (() => {
     let round = 1;
+    let playerOne;
+    let playerTwo;
 
-    let initializePlayers = (res, rej) => {
+    function initializePlayers() {
         const playerOneName = document.querySelector('#player-one').value;
         const playerTwoName = document.querySelector('#player-two').value;
-
-        console.log(playerOneName, playerTwoName)
-        
-        return {playerOneName}
+        playerOne = player(playerOneName, "X", 1)
+        playerTwo = player(playerTwoName, "O", 2);
     }
-
 
     const playerForm = 
     `
@@ -124,24 +123,22 @@ const game = (() => {
             round++
         }
     }
-    const playerOne = player(initializePlayers.playerOneName, "X", 1);
-    const playerTwo = player('name', "O", 2);
+
 
     const newGame = () => {
         // const playerOne = null;
         // const playerTwo = null;
         round = 1;
-    
+
         const main = document.querySelector('.grid');
         main.innerHTML = gameBoard.renderBoard()
         document.querySelector('.players').innerHTML = playerForm
-        document.querySelector('#start-game').addEventListener('click', initializePlayers)
+        document.querySelector('#start-game').addEventListener('click', changeName)
         document.querySelectorAll('.cell').forEach(select => select.addEventListener('click', turn))
-
     }
 
     newGame()
 
-    return {playerOne, initializePlayers}
+    return {playerOne}
 })()
 
