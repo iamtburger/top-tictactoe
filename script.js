@@ -53,18 +53,7 @@ const game = (() => {
         playerTwo = player(playerTwoName, "O", 2);
     }
 
-    const playerForm = 
-    `
-    <div>
-        <input type="text" id="player-one" placeholder="Insert Player One Name">
-        <input type="text" id="player-two" placeholder="Insert Player Two Name">
-    </div>
-    <div>
-        <button id="start-game">Insert Coin</button>
-    </div>
-    `;
-    let header = document.querySelector('.players');
-    header.innerHTML = playerForm;
+
 
 
 
@@ -74,25 +63,25 @@ const game = (() => {
         const magicSquare = [8, 1, 6, 3, 5, 7, 4, 9, 2];
         // Stores the possible winning combinations
         const winningStates = [
-            [val,val,val,'','','','','',''],
-            ['','','',val,val,val,'','',''],
-            ['','','','','','',val,val,val],
-            [val,'','','',val,'','','',val],
-            ['','',val,'',val,'',val,'',''],
-            [val,'','',val,'','',val,'',''],
-            ['',val,'','',val,'','',val,''],
-            ['','',val,'','',val,'','',val],
+            [val.playerSign,val.playerSign,val.playerSign,'','','','','',''],
+            ['','','',val.playerSign,val.playerSign,val.playerSign,'','',''],
+            ['','','','','','',val.playerSign,val.playerSign,val.playerSign],
+            [val.playerSign,'','','',val.playerSign,'','','',val.playerSign],
+            ['','',val.playerSign,'',val.playerSign,'',val.playerSign,'',''],
+            [val.playerSign,'','',val.playerSign,'','',val.playerSign,'',''],
+            ['',val.playerSign,'','',val.playerSign,'','',val.playerSign,''],
+            ['','',val.playerSign,'','',val.playerSign,'','',val.playerSign],
         ];
 
         for (i = 0; i < winningStates.length; i++) {
             let winNum = 0;
             for (j = 0; j < winningStates[i].length; j++) {
-                if (gameBoard.board[j] === val && winningStates[i][j] === val) {
+                if (gameBoard.board[j] === val.playerSign && winningStates[i][j] === val.playerSign) {
                     winNum = winNum + magicSquare[j]
                 }
             }
             if (winNum === 15) {
-                console.log(`${val} WON THE GAME`)
+                gameWon(val.playerName)
             }
         }
 
@@ -117,22 +106,35 @@ const game = (() => {
         // }
     }
 
+    const gameWon = (winner) => {
+        document.querySelector('.play-area').innerHTML = `
+            <div>
+                <h1>${winner} has won the game!</h1>
+            </div>
+            <div>
+                <button id="new-game">Play Again</button>
+            </div>
+        `
+        document.querySelector('#new-game').addEventListener('click', startGame)
+    }
+
 
     function turn() {
         if (round % 2 !== 0) {
             this.innerText = playerOne.playerSign;
             gameBoard.board[this.dataset.label] = playerOne.playerSign;
             this.removeEventListener('click', turn);
-            checkForWin(playerOne.playerSign)
+            checkForWin(playerOne)
             round++
         } else {
             this.innerText = playerTwo.playerSign;
             gameBoard.board[this.dataset.label] = playerTwo.playerSign;
             this.removeEventListener('click', turn);
-            checkForWin(playerTwo.playerSign)
+            checkForWin(playerTwo)
             round++
         }
     }
+
 
 
     const newGame = () => {
@@ -140,21 +142,39 @@ const game = (() => {
         playerTwo = null;
         round = 1;
         console.log('NEW GAME STARTED')
+        gameBoard.clearBoard()
 
         const main = document.querySelector('.grid');
         main.innerHTML = gameBoard.renderBoard()
         initializePlayers()
         document.querySelectorAll('.cell').forEach(select => select.addEventListener('click', turn))
-        header.innerHTML = `
+        document.querySelector('.players').innerHTML = `
             <div>
                 <h2>Player One (${playerOne.playerSign}): ${playerOne.playerName}</h2>
                 <h2>Player Two (${playerTwo.playerSign}): ${playerTwo.playerName}</h2>
             </div>
         `
-
     }
 
-    document.querySelector('#start-game').addEventListener('click', newGame)
+    const startGame = () => {
+        const playerForm = 
+        `
+        <div>
+            <input type="text" id="player-one" placeholder="Insert Player One Name">
+            <input type="text" id="player-two" placeholder="Insert Player Two Name">
+        </div>
+        <div>
+            <button id="start-game">Insert Coin</button>
+        </div>
+        `;
+        let header = document.querySelector('.players');
+        header.innerHTML = playerForm;
+        document.querySelector('#start-game').addEventListener('click', newGame)
+        document.querySelector('.play-area').innerHTML = `<div class="grid"></div>`
+    }
+    startGame()
+
+    
 
     return { getPlayer }
 
