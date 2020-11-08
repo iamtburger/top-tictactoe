@@ -33,17 +33,37 @@ function player(name, sign, num) {
 
 // Game logic and control
 const game = (() => {
-
-    const playerOne = player("TempName", "X", 1)
-    const playerTwo = player("TempName", "O", 2)
     let round = 1;
 
-    const main = document.querySelector('.grid');
-    main.innerHTML = gameBoard.renderBoard()
+    let initializePlayers = (res, rej) => {
+        const playerOneName = document.querySelector('#player-one').value;
+        const playerTwoName = document.querySelector('#player-two').value;
 
+        console.log(playerOneName, playerTwoName)
+        
+        return {playerOneName}
+    }
+
+
+    const playerForm = 
+    `
+    <div>
+        <input type="text" id="player-one" placeholder="Insert Player One Name">
+        <input type="text" id="player-two" placeholder="Insert Player Two Name">
+    </div>
+    <div>
+        <button id="start-game">Start Game</button>
+    </div>
+    `;
+    
+
+
+
+    
     const checkForWin = (val) => {
         // Solution using the Magic Square for 3x3 table
         const magicSquare = [8, 1, 6, 3, 5, 7, 4, 9, 2];
+        // Stores the possible winning combinations
         const winningStates = [
             [val,val,val,'','','','','',''],
             ['','','',val,val,val,'','',''],
@@ -89,8 +109,6 @@ const game = (() => {
     }
 
 
-    // Arrow functionnel nem működik a this -> mire szól a this? miért?
-    // removeEventListener és akkor nem kell nézni, hogy van-e már a cellában valami
     function turn() {
         if (round % 2 !== 0) {
             this.innerText = playerOne.playerSign;
@@ -106,11 +124,24 @@ const game = (() => {
             round++
         }
     }
+    const playerOne = player(initializePlayers.playerOneName, "X", 1);
+    const playerTwo = player('name', "O", 2);
 
-    document.querySelectorAll('.cell').forEach(select => select.addEventListener('click', turn))
+    const newGame = () => {
+        // const playerOne = null;
+        // const playerTwo = null;
+        round = 1;
+    
+        const main = document.querySelector('.grid');
+        main.innerHTML = gameBoard.renderBoard()
+        document.querySelector('.players').innerHTML = playerForm
+        document.querySelector('#start-game').addEventListener('click', initializePlayers)
+        document.querySelectorAll('.cell').forEach(select => select.addEventListener('click', turn))
 
+    }
 
+    newGame()
 
-    return { playerOne, playerTwo }
+    return {playerOne, initializePlayers}
 })()
 
