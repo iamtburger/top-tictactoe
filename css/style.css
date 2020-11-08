@@ -38,3 +38,7 @@
     display: flex;
     justify-content: center;
   }
+
+button, form, h1, h2  {
+  font-family: 'Roboto', sans-serif;
+}

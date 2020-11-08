@@ -31,11 +31,20 @@ function player(name, sign, num) {
     return { playerName, playerSign, playerNum }
 }
 
+
+// let playerOne;
+// let playerTwo;
+
 // Game logic and control
 const game = (() => {
     let round = 1;
     let playerOne;
     let playerTwo;
+
+    let getPlayer = () => {
+        console.log(playerOne)
+    }
+    
 
     function initializePlayers() {
         const playerOneName = document.querySelector('#player-one').value;
@@ -51,10 +60,11 @@ const game = (() => {
         <input type="text" id="player-two" placeholder="Insert Player Two Name">
     </div>
     <div>
-        <button id="start-game">Start Game</button>
+        <button id="start-game">Insert Coin</button>
     </div>
     `;
-    
+    let header = document.querySelector('.players');
+    header.innerHTML = playerForm;
 
 
 
@@ -126,19 +136,27 @@ const game = (() => {
 
 
     const newGame = () => {
-        // const playerOne = null;
-        // const playerTwo = null;
+        playerOne = null;
+        playerTwo = null;
         round = 1;
+        console.log('NEW GAME STARTED')
 
         const main = document.querySelector('.grid');
         main.innerHTML = gameBoard.renderBoard()
-        document.querySelector('.players').innerHTML = playerForm
-        document.querySelector('#start-game').addEventListener('click', changeName)
+        initializePlayers()
         document.querySelectorAll('.cell').forEach(select => select.addEventListener('click', turn))
+        header.innerHTML = `
+            <div>
+                <h2>Player One (${playerOne.playerSign}): ${playerOne.playerName}</h2>
+                <h2>Player Two (${playerTwo.playerSign}): ${playerTwo.playerName}</h2>
+            </div>
+        `
+
     }
 
-    newGame()
+    document.querySelector('#start-game').addEventListener('click', newGame)
 
-    return {playerOne}
+    return { getPlayer }
+
 })()
 
