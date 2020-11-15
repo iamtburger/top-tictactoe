@@ -39,6 +39,6 @@
     justify-content: center;
   }
 
-button, form, h1, h2  {
+button, form, h1, h2, p  {
   font-family: 'Roboto', sans-serif;
 }
