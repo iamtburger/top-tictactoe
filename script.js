@@ -1,7 +1,7 @@
 // Gameboard object
 const gameBoard = (() => {
     // let board = ['','','','','','','','',''];
-    let board = ['X','','O','O','','O','X','',''];
+    let board = ["","","","","","","","",""];
 
     let renderBoard = () => {
         return board.map((val, index) => {
@@ -51,6 +51,7 @@ const computerAi = (() => {
 
         const humanPlayer = game.getPlayer()
         let availableSlots = remainingSteps(newBoard);
+        console.log(availableSlots)
 
         // console.log('depth: '+depth)
         // console.log('board: '+newBoard)
@@ -58,13 +59,13 @@ const computerAi = (() => {
 
         if (game.checkForWin(newBoard, humanPlayer)) {
             // console.log(-10)
-            return -10;
+            return {score:-10};
         } else if (game.checkForWin(newBoard, game.playerAi)) {
             // console.log(10)
-            return 10;
+            return {score:10};
         } else if (game.checkForTie(newBoard)) {
             // console.log(0)
-            return 0;
+            return {score:0};
         }
         
         const moves = [];
@@ -80,14 +81,14 @@ const computerAi = (() => {
 
             if (player === game.playerAi) {
                 let result = minimax(newBoard, humanPlayer);
-                move.score = result;
+                move.score = result.score;
             } else {
                 let result = minimax(newBoard, game.playerAi);
-                move.score = result;
+                move.score = result.score;
             }
 
             newBoard[availableSlots[i]] = "";
-            // console.log('after:'+newBoard)
+            
 
             // console.log(move)
             moves.push(move);
