@@ -1,7 +1,6 @@
 // Gameboard object
 const gameBoard = (() => {
-    // let board = ['','','','','','','','',''];
-    let board = ["","","","","","","","",""];
+    let board = ['','','','','','','','',''];
 
     let renderBoard = () => {
         return board.map((val, index) => {
@@ -12,12 +11,17 @@ const gameBoard = (() => {
     };
 
     let clearBoard = () => {
-        // for (let i = 0; i < 9; i++) {
-        //     board[i] = '';
-        // };
+        for (let i = 0; i < 9; i++) {
+            board[i] = '';
+        };
         document.querySelector('.grid').innerHTML = renderBoard()
-
     }
+
+    // It does not work this ways somehow
+    // function clearBoard() {
+    //     board = ['','','','','','','','',''];
+    //     document.querySelector('.grid').innerHTML = renderBoard()
+    // }
 
     return {board, renderBoard, clearBoard}
 
@@ -230,44 +234,85 @@ const game = (() => {
 
     function turn() {
         const that = this;
-        function playerVsPlayer(player) {
+        // function playerVsPlayer(player) {
+        //     that.innerText = player.playerSign;
+        //     gameBoard.board[that.dataset.label] = player.playerSign;
+        //     that.removeEventListener('click', turn);
+        //     if (checkForWin(gameBoard.board, player)) {
+        //         gameWon(player.playerName)
+        //     } else if (checkForTie(gameBoard.board)) {
+        //         tie()
+        //     }
+        //     round++
+        // };
+        
+        function step(player) {
             that.innerText = player.playerSign;
-            gameBoard.board[that.dataset.label] = player.playerSign;
-            this.removeEventListener('click', turn);
+            if (player === playerAi) {
+                let best = computerAi.minimax(gameBoard.board, playerAi).index;
+                gameBoard.board[best] = playerAi.playerSign;
+                const cell = document.querySelector(`#cell-${best}`)
+                cell.innerText = playerAi.playerSign;
+                cell.removeEventListener('click', turn);
+            } else {
+                gameBoard.board[that.dataset.label] = player.playerSign;
+                that.removeEventListener('click', turn);
+            }
             if (checkForWin(gameBoard.board, player)) {
                 gameWon(player.playerName)
             } else if (checkForTie(gameBoard.board)) {
                 tie()
             }
             round++
-        };
+        }
+
         if (!playAgainstComputer) {
             if (round % 2 !== 0) {
-                playerVsPlayer(playerOne);
+                step(playerOne);
             } else {
-                playerVsPlayer(playerTwo);
+                step(playerTwo);
             }
         } else {
             if (round % 2 !== 0) {
-                playerVsPlayer(playerOne);
+                step(playerOne);
                 if (!checkForTie(gameBoard.board)) {
                     turn()
                 }
             } else {
-                let best = computerAi.minimax(gameBoard.board, playerAi).index;
-                console.log(best);
-                gameBoard.board[best] = playerAi.playerSign;
-                document.querySelector(`#cell-${best}`).innerText = playerAi.playerSign;
-                this.removeEventListener('click', turn);
-                if (checkForWin(gameBoard.board, playerAi)) {
-                    gameWon(playerAi.playerName)
-                } else if (checkForTie(gameBoard.board)) {
-                    tie()
-                }
-                round++
-                return
+                step(playerAi);
             }
         }
+
+        // if (!playAgainstComputer) {
+        //     if (round % 2 !== 0) {
+        //         playerVsPlayer(playerOne);
+        //     } else {
+        //         playerVsPlayer(playerTwo);
+        //     }
+        // } else {
+        //     if (round % 2 !== 0) {
+        //         playerVsPlayer(playerOne);
+        //         if (!checkForTie(gameBoard.board)) {
+        //             turn()
+        //         }
+        //     } else {
+        //         let best = computerAi.minimax(gameBoard.board, playerAi).index;
+        //         console.log(best);
+        //         gameBoard.board[best] = playerAi.playerSign;
+        //         document.querySelector(`#cell-${best}`).innerText = playerAi.playerSign;
+        //         that.removeEventListener('click', turn);
+            
+        //         if (checkForWin(gameBoard.board, playerAi)) {
+        //             gameWon(playerAi.playerName)
+        //         } else if (checkForTie(gameBoard.board)) {
+        //             tie()
+        //         }
+        //         round++
+        //         return
+        //     }
+        // };
+
+
         // if (round % 2 !== 0) {
         //     playerVsPlayer(playerOne)
         //     // this.innerText = playerOne.playerSign;
