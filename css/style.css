@@ -34,11 +34,30 @@
   justify-content: center;
   }
 
-  .players {
-    display: flex;
-    justify-content: center;
-  }
+.players {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
 
-button, form, h1, h2, p  {
+.input-container {
+  flex-direction: column;
+}
+
+body  {
   font-family: 'Roboto', sans-serif;
+}
+
+.player-inputs {
+  margin-top: 10px;
+}
+
+button {
+  width: 100%;
+  margin-top: 15px;
+  padding: 10px;
+}
+
+.against-computer {
+  margin-top: 15px;
 }

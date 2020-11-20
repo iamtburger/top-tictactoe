@@ -17,12 +17,6 @@ const gameBoard = (() => {
         document.querySelector('.grid').innerHTML = renderBoard()
     }
 
-    // It does not work this ways somehow
-    // function clearBoard() {
-    //     board = ['','','','','','','','',''];
-    //     document.querySelector('.grid').innerHTML = renderBoard()
-    // }
-
     return {board, renderBoard, clearBoard}
 
 })();
@@ -124,10 +118,6 @@ const game = (() => {
         return playerOne;
     }
     
-    let getStatus = () => {
-        return playAgainstComputer;
-    }
-
     function initializePlayers() {
         const playerOneName = document.querySelector('#player-one').value;
         const playerTwoName = document.querySelector('#player-two').value;
@@ -182,36 +172,18 @@ const game = (() => {
 
         }
         return false
-
-
-        // Solution using if else statements
-        // if (gameBoard.board[0] === val && gameBoard.board[1] === val && gameBoard.board[2] === val) {
-        //     console.log(`${val} WON THE GAME`)
-        // } else if (gameBoard.board[3] === val && gameBoard.board[4] === val && gameBoard.board[5] === val) {
-        //     console.log(`${val} WON THE GAME`)
-        // } else if (gameBoard.board[6] === val && gameBoard.board[7] === val && gameBoard.board[8] === val) {
-        //     console.log(`${val} WON THE GAME`)
-        // } else if (gameBoard.board[0] === val && gameBoard.board[3] === val && gameBoard.board[6] === val) {
-        //     console.log(`${val} WON THE GAME`)
-        // } else if (gameBoard.board[1] === val && gameBoard.board[4] === val && gameBoard.board[7] === val) {
-        //     console.log(`${val} WON THE GAME`)
-        // } else if (gameBoard.board[2] === val && gameBoard.board[5] === val && gameBoard.board[8] === val) {
-        //     console.log(`${val} WON THE GAME`)
-        // } else if (gameBoard.board[0] === val && gameBoard.board[4] === val && gameBoard.board[8] === val) {
-        //     console.log(`${val} WON THE GAME`)
-        // } else if (gameBoard.board[2] === val && gameBoard.board[4] === val && gameBoard.board[6] === val) {
-        //     console.log(`${val} WON THE GAME`)
-        // }
     }
 
     const gameWon = (winner) => {
         
         document.querySelector('.players').innerHTML = `
-            <div>
-                <h1>${winner} has won the game!</h1>
-            </div>
-            <div>
-                <button id="new-game">Play Again</button>
+            <div class="input-container">
+                <div>
+                    <h1>${winner} has won the game!</h1>
+                </div>
+                <div>
+                    <button id="new-game">Play Again</button>
+                </div>
             </div>
         `
         document.querySelector('#new-game').addEventListener('click', startGame)
@@ -220,11 +192,13 @@ const game = (() => {
 
     const tie = () => {
         document.querySelector('.players').innerHTML = `
-        <div>
-            <h1>It's a tie! Play again?</h1>
-        </div>
-        <div>
-            <button id="new-game">Play Again</button>
+        <div class="input-container">
+            <div>
+                <h1>It's a tie! Play again?</h1>
+            </div>
+            <div>
+                <button id="new-game">Play Again</button>
+            </div>
         </div>
     `
     document.querySelector('#new-game').addEventListener('click', startGame)
@@ -234,17 +208,6 @@ const game = (() => {
 
     function turn() {
         const that = this;
-        // function playerVsPlayer(player) {
-        //     that.innerText = player.playerSign;
-        //     gameBoard.board[that.dataset.label] = player.playerSign;
-        //     that.removeEventListener('click', turn);
-        //     if (checkForWin(gameBoard.board, player)) {
-        //         gameWon(player.playerName)
-        //     } else if (checkForTie(gameBoard.board)) {
-        //         tie()
-        //     }
-        //     round++
-        // };
         
         function step(player) {
             that.innerText = player.playerSign;
@@ -279,76 +242,10 @@ const game = (() => {
                     turn()
                 }
             } else {
-                step(playerAi);
+                setTimeout(()=>{step(playerAi)}, 800)
             }
         }
 
-        // if (!playAgainstComputer) {
-        //     if (round % 2 !== 0) {
-        //         playerVsPlayer(playerOne);
-        //     } else {
-        //         playerVsPlayer(playerTwo);
-        //     }
-        // } else {
-        //     if (round % 2 !== 0) {
-        //         playerVsPlayer(playerOne);
-        //         if (!checkForTie(gameBoard.board)) {
-        //             turn()
-        //         }
-        //     } else {
-        //         let best = computerAi.minimax(gameBoard.board, playerAi).index;
-        //         console.log(best);
-        //         gameBoard.board[best] = playerAi.playerSign;
-        //         document.querySelector(`#cell-${best}`).innerText = playerAi.playerSign;
-        //         that.removeEventListener('click', turn);
-            
-        //         if (checkForWin(gameBoard.board, playerAi)) {
-        //             gameWon(playerAi.playerName)
-        //         } else if (checkForTie(gameBoard.board)) {
-        //             tie()
-        //         }
-        //         round++
-        //         return
-        //     }
-        // };
-
-
-        // if (round % 2 !== 0) {
-        //     playerVsPlayer(playerOne)
-        //     // this.innerText = playerOne.playerSign;
-        //     // gameBoard.board[this.dataset.label] = playerOne.playerSign;
-        //     // this.removeEventListener('click', turn);
-        //     // if (checkForWin(gameBoard.board, playerOne)) {
-        //     //     gameWon(playerOne.playerName)
-        //     // } else if (checkForTie(gameBoard.board)) {
-        //     //     tie()
-        //     // }
-        //     // round++
-        //     // let best = computerAi.minimax(gameBoard.board, playerAi);
-
-        // } else if (!playAgainstComputer) {
-        //     playerVsPlayer(playerTwo)
-        //     // this.innerText = playerTwo.playerSign;
-        //     // gameBoard.board[this.dataset.label] = playerTwo.playerSign;
-        //     // this.removeEventListener('click', turn);
-        //     // if (checkForWin(gameBoard.board, playerTwo)) {
-        //     //     gameWon(playerTwo.playerName)
-        //     // } else if (checkForTie(gameBoard.board)) {
-        //     //     tie()
-        //     // }
-        //     // round++
-        // } else {
-        //     let best = computerAi.minimax(gameBoard.board, playerAi)
-        //     this.innerText = playerAi.playerSign;
-        //     gameBoard.board[best.index] = playerAi.playerSign;
-        //     this.removeEventListener('click', turn);
-        //     if (checkForWin(gameBoard.board, playerAi)) {
-        //         gameWon(playerAi.playerName)
-        //     } else if (checkForTie(gameBoard.board)) {
-        //         tie()
-        //     }
-        //     round++
-        // }
     }
 
 
@@ -363,35 +260,60 @@ const game = (() => {
         main.innerHTML = gameBoard.renderBoard()
         initializePlayers()
         document.querySelectorAll('.cell').forEach(select => select.addEventListener('click', turn))
-        document.querySelector('.players').innerHTML = `
+        if (playAgainstComputer) {
+            document.querySelector('.players').innerHTML = `
             <div>
                 <h2>Player One (${playerOne.playerSign}): ${playerOne.playerName}</h2>
-                <h2>Player Two (${playerTwo.playerSign}): ${playerTwo.playerName}</h2>
+                <h2>Player Two (${playerAi.playerSign}): ${playerAi.playerName}</h2>
             </div>
         `
+        } else {
+            document.querySelector('.players').innerHTML = `
+                <div>
+                    <h2>Player One (${playerOne.playerSign}): ${playerOne.playerName}</h2>
+                    <h2>Player Two (${playerTwo.playerSign}): ${playerTwo.playerName}</h2>
+                </div>
+            `
+        }
     }
 
     const startGame = () => {
         const playerForm = 
         `
-        <div>
+        <div class="input-container">
+        <div class="player-inputs">
             <input type="text" id="player-one" placeholder="Insert Player One Name">
-            <input type="text" id="player-two" placeholder="Insert Player Two Name"> <input type="checkbox" id="computer"><p>Play against computer?</p></input>
         </div>
-        <div>
+        <div class="player-inputs">   
+            <input type="text" id="player-two" placeholder="Insert Player Two Name"> 
+        </div>
+        <div class="against-computer">
+            <input type="checkbox" id="computer" name="computer">Play against computer?</input>
+        </div>
+        <div class="start-button">
             <button id="start-game">Insert Coin</button>
+        </div>
         </div>
         `;
         let header = document.querySelector('.players');
         header.innerHTML = playerForm;
-        document.querySelector('#start-game').addEventListener('click', newGame)
-        document.querySelector('.play-area').innerHTML = `<div class="grid"></div>`
+        let skynet = document.querySelector('#computer');
+        skynet.addEventListener('change', function() {
+            if (this.checked) {
+                console.log('Works')
+                document.querySelector('#player-two').hidden = true;
+            } else {
+                document.querySelector('#player-two').hidden = false;
+            };
+        })
+        document.querySelector('#start-game').addEventListener('click', newGame);
+        document.querySelector('.play-area').innerHTML = `<div class="grid"></div>`;
     }
     startGame()
 
     
 
-    return { getPlayer, checkForWin, playerAi, playerTwo, checkForTie, getStatus }
+    return { getPlayer, checkForWin, playerAi, playerTwo, checkForTie }
 
 })()
 
